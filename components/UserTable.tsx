@@ -77,8 +77,13 @@ export default function UserTable() {
                     height={130}
                   />
                 </td>
-                <td className="p-3 font-medium">
-                  {user.firstName} {user.lastName}
+                <td className="p-3 font-medium flex items-center gap-2">
+                  {user.firstName} {user.lastName}{" "}
+                  {user.isNew && (
+                    <div className="bg-green-400 px-3 py-1 text-sm rounded-full">
+                      New
+                    </div>
+                  )}
                 </td>
                 <td className="p-3">{user.email}</td>
                 <td className="p-3">{user.phone}</td>

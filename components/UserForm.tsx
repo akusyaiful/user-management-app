@@ -39,6 +39,12 @@ const UserForm = ({
     }
   }, [user]);
 
+  const isFormValid =
+    formData.firstName.trim() !== "" &&
+    formData.lastName.trim() !== "" &&
+    formData.email.trim() !== "" &&
+    formData.phone.trim() !== "";
+
   const validateData = async () => {
     try {
       setError(null);
@@ -49,7 +55,7 @@ const UserForm = ({
           `https://emailvalidation.abstractapi.com/v1/?api_key=${EMAIL_API_KEY}&email=${formData.email}`
         );
         if (!res.data.is_valid_format.value) {
-          setError("Email is invalid");
+          setError("Email is invalid!");
           return false;
         }
       }
@@ -59,14 +65,14 @@ const UserForm = ({
           `https://phonevalidation.abstractapi.com/v1/?api_key=${PHONE_API_KEY}&phone=${formData.phone}`
         );
         if (!res.data.valid) {
-          setError("Phone number is invalid");
+          setError("Phone number is invalid!");
           return false;
         }
       }
-      setSuccess("Valid!");
+      setSuccess("Valid");
       return true;
     } catch (err) {
-      setError("Failed to validating the data");
+      setError("Failed to validating the data!");
       return false;
     }
   };
@@ -156,15 +162,19 @@ const UserForm = ({
             className="border p-2 w-full rounded-lg border border-gray-500"
           />
 
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">{success}</p>}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {success && <p className="text-green-500 text-sm">{success}</p>}
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !isFormValid}
             className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 w-full font-medium"
           >
-            {loading ? "Validating..." : user?.id ? "Update User" : "Add User"}
+            {loading
+              ? "Validating..."
+              : user?.id
+              ? "Update User"
+              : "Validate & Add"}
           </button>
         </form>
       </div>
