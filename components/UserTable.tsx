@@ -7,7 +7,7 @@ import {
   selectPaginatedUsers,
   User,
 } from "@/store/userSlice";
-import { Pencil, Trash } from "lucide-react";
+import { Pencil, Plus, Trash } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import DeleteModal from "./DeleteModal";
@@ -18,7 +18,7 @@ import UserForm from "./UserForm";
 export default function UserTable() {
   const dispatch = useAppDispatch();
   const { users } = useAppSelector(selectPaginatedUsers);
-  const { loading, error, page, limit, localUsers } = useAppSelector(
+  const { loading, error, page, limit } = useAppSelector(
     (state) => state.users
   );
   const [openForm, setOpenForm] = useState(false);
@@ -30,8 +30,8 @@ export default function UserTable() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchUsers({ page, limit, localCount: localUsers.length }));
-  }, [dispatch, page, limit, localUsers]);
+    dispatch(fetchUsers({ page, limit, localCount: 0 }));
+  }, [dispatch, page, limit]);
 
   return (
     <div className=" bg-white rounded-xl p-6">
@@ -44,9 +44,9 @@ export default function UserTable() {
             setEditData(null);
             setOpenForm(true);
           }}
-          className="px-3 py-2 w-[100%] md:w-fit bg-blue-500 hover:bg-blue-600 cursor-pointer text-white rounded-lg font-medium"
+          className="flex items-center gap-2 px-3 py-2 w-[100%] md:w-fit bg-blue-500 hover:bg-blue-600 cursor-pointer text-white rounded-lg font-medium"
         >
-          + Add User
+          <Plus /> Add User
         </button>
       </div>
       <div className="overflow-x-auto">
@@ -89,7 +89,7 @@ export default function UserTable() {
                 <td className="p-3">{user.phone}</td>
                 <td className="p-3 flex gap-2 items-center min-h-[64px]">
                   <button
-                    className="flex p-2 px-3 bg-yellow-400 hover:bg-yellow-500 rounded-lg cursor-pointer font-medium"
+                    className="flex p-2 px-3 bg-yellow-300 hover:bg-yellow-400 rounded-lg cursor-pointer font-medium"
                     onClick={() => {
                       setEditData(user);
                       setOpenForm(true);

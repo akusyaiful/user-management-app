@@ -15,6 +15,7 @@ export interface User {
 interface UserState {
   localUsers: User[];
   apiUsers: User[];
+  deletedApiUserIds: string[];
   loading: boolean;
   error: string | null;
   search: string;
@@ -26,6 +27,7 @@ interface UserState {
 const initialState: UserState = {
   localUsers: [],
   apiUsers: [],
+  deletedApiUserIds: [],
   loading: false,
   error: null,
   search: "",
@@ -80,16 +82,29 @@ const userSlice = createSlice({
       saveToLocal(updatedLocal);
     },
     editUser: (state, action: PayloadAction<User>) => {
-      state.localUsers = state.localUsers.map((u) =>
-        u.id === action.payload.id ? action.payload : u
-      );
-      saveToLocal(state.localUsers);
+      const { id } = action.payload;
+
+      const localIndex = state.localUsers.findIndex((u) => u.id === id);
+      if (localIndex !== -1) {
+        state.localUsers[localIndex] = action.payload;
+        saveToLocal(state.localUsers);
+        return;
+      }
+
+      const apiIndex = state.apiUsers.findIndex((u) => u.id === id);
+      if (apiIndex !== -1) {
+        state.apiUsers[apiIndex] = action.payload;
+      }
     },
     deleteUser: (state, action: PayloadAction<string>) => {
-      state.localUsers = state.localUsers.filter(
-        (u) => u.id !== action.payload
-      );
+      const id = action.payload;
+
+      state.localUsers = state.localUsers.filter((u) => u.id !== id);
       saveToLocal(state.localUsers);
+
+      if (state.apiUsers.find((u) => u.id === id)) {
+        state.deletedApiUserIds.push(id);
+      }
     },
     setSearch: (state, action: PayloadAction<string>) => {
       state.search = action.payload;
@@ -131,7 +146,15 @@ export const {
 export default userSlice.reducer;
 
 export const selectPaginatedUsers = (state: RootState) => {
-  const { page, limit, search, localUsers, apiUsers, total } = state.users;
+  const {
+    page,
+    limit,
+    search,
+    localUsers,
+    apiUsers,
+    total,
+    deletedApiUserIds,
+  } = state.users;
 
   let combined: User[] = [];
 
@@ -142,8 +165,12 @@ export const selectPaginatedUsers = (state: RootState) => {
 
   const remainingSlots = limit - localSlice.length;
 
+  const filteredApi = apiUsers.filter(
+    (u) => !deletedApiUserIds.includes(u.id!)
+  );
+
   if (remainingSlots > 0) {
-    combined = [...localSlice, ...apiUsers.slice(0, remainingSlots)];
+    combined = [...localSlice, ...filteredApi.slice(0, remainingSlots)];
   } else {
     combined = [...localSlice];
   }

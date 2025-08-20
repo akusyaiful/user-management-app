@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectPaginatedUsers, setPage } from "@/store/userSlice";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
 
 export const Pagination = () => {
@@ -18,7 +19,7 @@ export const Pagination = () => {
             : "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
         }`}
       >
-        Prev
+        <ChevronLeft />
       </button>
 
       <span className="text-gray-700 font-medium">
@@ -28,13 +29,13 @@ export const Pagination = () => {
       <button
         onClick={() => dispatch(setPage(page + 1))}
         disabled={page === totalPages}
-        className={`px-4 py-2 rounded-lg transition font-medium ${
+        className={`px-3 py-2 rounded-lg transition font-medium ${
           page === totalPages
             ? "bg-gray-200 text-gray-400 cursor-not-allowed"
             : "bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
         }`}
       >
-        Next
+        <ChevronRight />
       </button>
     </div>
   );

@@ -13,8 +13,9 @@ const DeleteModal = ({
   const fullName = `${user?.firstName} ${user?.lastName}`;
 
   const handleDeleteUser = () => {
-    dispatch(deleteUser(String(user?.id)));
-    toast.success("Success Delete User");
+    if (!user?.id) return;
+    dispatch(deleteUser(user.id));
+    toast.success("User deleted successfully");
     onClose();
   };
 
@@ -28,13 +29,13 @@ const DeleteModal = ({
         <div className="flex gap-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600  w-[50%] font-medium cursor-pointer"
+            className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600  w-[50%] font-medium cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleDeleteUser}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600  w-[50%] font-medium cursor-pointer"
+            className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600  w-[50%] font-medium cursor-pointer"
           >
             Delete
           </button>
