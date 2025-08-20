@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# User Management App
 
-First, run the development server:
+"User Manager" is a simple application that displays a list of users from DummyJSON, allows searching for users, and provides a form to add a new user with email or phone validation using AbstractAPI.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Live Preview
+https://user-management-app-psi-gold.vercel.app/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment
+Proyek ini menggunakan beberapa library dan framework berikut:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js**: `15.5.0` – Framework React untuk SSR dan SSG.
+- **React**: `19.1.0` – Library UI utama.
+- **React DOM**: `19.1.0` – Package untuk rendering React di DOM.
+- **Redux Toolkit**: `^2.8.2` – Untuk state management yang lebih mudah.
+- **React Redux**: `^9.2.0` – Binding antara React dan Redux.
+- **Axios**: `^1.11.0` – Untuk melakukan HTTP request.
+- **Date-fns**: `^4.1.0` – Library manipulasi tanggal.
+- **Lucide React**: `^0.540.0` – Ikon untuk React.
+- **React Hot Toast**: `^2.6.0` – Untuk notifikasi toast.  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Fitur utama
+1.  **Hybrid Data Management**
+   - **Local Users:** Data yang ditambahkan sendiri melalui form (`add`, `edit`, `delete`). Data disimpan di `localStorage`.
+   - **API Users:** Data fetch dari API `dummyjson` sesuai page & limit.
+   - **Gabungan Data:** Halaman pertama menampilkan local users + sisanya dari API. Halaman berikutnya menampilkan API users saja.
 
-## Learn More
+2.  **Pagination**
+   - Limit & page bisa diatur (`limit = 3` atau 5).
+   - Logika:
+     - Halaman pertama = local users + sisa API sesuai limit.
+     - Halaman berikutnya = API users.
+   - Total pages dihitung dari jumlah gabungan data local + API.
 
-To learn more about Next.js, take a look at the following resources:
+3.  **Search**
+   - Bisa mencari user berdasarkan **Full Name (`firstName + lastName`)** atau **Email**.
+   - Filter berjalan di gabungan local + API data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4.  **CRUD Lokal**
+   - **Add User:** Tambah user baru ke local storage.
+   - **Edit User:** Edit data user lokal.
+   - **Delete User:** Hapus user lokal.
+   - **Load Local Users:** Memuat data dari localStorage saat komponen dimount.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5.  **Async Fetch**
+   - Mengambil data dari API dummyjson menggunakan `createAsyncThunk`.
+   - Mengatur `skip` agar jumlah data halaman pertama tidak melebihi limit setelah dikurangi local users.
 
-## Deploy on Vercel
+6.  **UI Components**
+   - **UserTable:** Menampilkan table user dengan photo, nama, email, phone, dan action button (edit/delete).  
+   - **Pagination:** Navigasi prev/next dengan disable otomatis di page pertama & terakhir.  
+   - **SearchBar:** Input untuk search data user secara real-time.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Instalasi
+-  `git clone https://github.com/akusyaiful/user-management-app.git`
+- `npm install`
