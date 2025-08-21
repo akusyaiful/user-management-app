@@ -61,56 +61,64 @@ export default function UserTable() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, i) => (
-              <tr
-                key={i}
-                className={`${
-                  i % 2 === 0 ? "bg-white" : "bg-gray-50"
-                } hover:bg-blue-50`}
-              >
-                <td className="p-3">
-                  <Image
-                    src={user.image || "/placeholder-profile.jpg"}
-                    alt={user.firstName}
-                    className="w-10 h-10 rounded-full object-cover"
-                    width={130}
-                    height={130}
-                  />
-                </td>
-                <td className="p-3 font-medium flex items-center gap-2">
-                  {user.firstName} {user.lastName}{" "}
-                  {user.isNew && (
-                    <div className="bg-green-400 px-3 py-1 text-sm rounded-full">
-                      New
-                    </div>
-                  )}
-                </td>
-                <td className="p-3">{user.email}</td>
-                <td className="p-3">{user.phone}</td>
-                <td className="p-3 flex gap-2 items-center min-h-[64px]">
-                  <button
-                    className="flex p-2 px-3 bg-yellow-300 hover:bg-yellow-400 rounded-lg cursor-pointer font-medium"
-                    onClick={() => {
-                      setEditData(user);
-                      setOpenForm(true);
-                    }}
-                  >
-                    <Pencil className="w-4 h-4 mr-2" />
-                    Edit
-                  </button>
-                  <button
-                    className="flex p-2 px-3 bg-red-500 hover:bg-red-600 text-white rounded-lg cursor-pointer font-medium"
-                    onClick={() => {
-                      setOpenConfirmDelete(true);
-                      setEditData(user);
-                    }}
-                  >
-                    <Trash className="w-4 h-4 mr-2" />
-                    Delete
-                  </button>
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="p-3 text-center text-gray-500">
+                  No users found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              users.map((user, i) => (
+                <tr
+                  key={i}
+                  className={`${
+                    i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } hover:bg-blue-50`}
+                >
+                  <td className="p-3">
+                    <Image
+                      src={user.image || "/placeholder-profile.jpg"}
+                      alt={user.firstName}
+                      className="w-10 h-10 rounded-full object-cover"
+                      width={130}
+                      height={130}
+                    />
+                  </td>
+                  <td className="p-3 font-medium flex items-center gap-2">
+                    {user.firstName} {user.lastName}{" "}
+                    {user.isNew && (
+                      <div className="bg-green-400 px-3 py-1 text-sm rounded-full">
+                        New
+                      </div>
+                    )}
+                  </td>
+                  <td className="p-3">{user.email}</td>
+                  <td className="p-3">{user.phone}</td>
+                  <td className="p-3 flex gap-2 items-center min-h-[64px]">
+                    <button
+                      className="flex p-2 px-3 bg-yellow-300 hover:bg-yellow-400 rounded-lg cursor-pointer font-medium"
+                      onClick={() => {
+                        setEditData(user);
+                        setOpenForm(true);
+                      }}
+                    >
+                      <Pencil className="w-4 h-4 mr-2" />
+                      Edit
+                    </button>
+                    <button
+                      className="flex p-2 px-3 bg-red-500 hover:bg-red-600 text-white rounded-lg cursor-pointer font-medium"
+                      onClick={() => {
+                        setOpenConfirmDelete(true);
+                        setEditData(user);
+                      }}
+                    >
+                      <Trash className="w-4 h-4 mr-2" />
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
